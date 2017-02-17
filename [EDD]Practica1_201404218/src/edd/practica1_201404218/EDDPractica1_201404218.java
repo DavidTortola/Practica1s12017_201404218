@@ -5,6 +5,8 @@
  */
 package edd.practica1_201404218;
 
+import ListaSimple.ListaSimple;
+
 /**
  *
  * @author David Tórtola
@@ -16,7 +18,8 @@ public class EDDPractica1_201404218 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        // nuevo comentario
+        Principal principal = new Principal();
+        principal.setVisible(true);
     }
-    
+
 }
