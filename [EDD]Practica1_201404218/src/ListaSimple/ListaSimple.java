@@ -138,4 +138,24 @@ public class ListaSimple {
             throw new Exception("El valor no existe en la lista.");
         }
     }
+
+    //Devuelve el valor de la posición que recibe
+    public Object getValor(int posicion) throws Exception {
+        if (posicion >= 0 && posicion < tamaño) {
+            if (posicion == 0) {
+                return inicio.getValor();
+            } else {
+                NodoSimple aux = inicio;
+                for (int index = 0; index < posicion; index++) {
+                    aux = aux.getSiguiente();
+                }
+
+                return aux.getValor();
+
+            }
+        } else {
+            throw new Exception("Posicion no existe en la lista.");
+        }
+    }
+
 }

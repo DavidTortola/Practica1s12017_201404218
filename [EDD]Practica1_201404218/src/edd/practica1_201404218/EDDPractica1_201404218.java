@@ -16,10 +16,15 @@ public class EDDPractica1_201404218 {
     /**
      * @param args the command line arguments
      */
+    
+    public static ListaSimple listaPosiciones = new ListaSimple();
+    public static ListaSimple listaPalabras = new ListaSimple();
+    
     public static void main(String[] args) {
         // TODO code application logic here
         Principal principal = new Principal();
         principal.setVisible(true);
+        
     }
 
 }
