@@ -5,6 +5,9 @@
  */
 package edd.practica1_201404218;
 
+import static edd.practica1_201404218.EDDPractica1_201404218.listaPalabras;
+import static edd.practica1_201404218.EDDPractica1_201404218.listaPosiciones;
+
 /**
  *
  * @author David Tórtola
@@ -38,6 +41,9 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -65,7 +71,32 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Opciones");
+
+        jMenuItem5.setText("Ver palabras");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuItem6.setText("Ver casillas dobles");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuItem7.setText("Ver casillas triples");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem7);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -118,6 +149,62 @@ public class Principal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        
+                //CÓDIGO PARA IMPRIMIR LAS PALABRAS
+        try{
+            for (int index = 0; index < listaPalabras.getTamaño(); index++) {
+                String aux = (String) listaPalabras.getValor(index);
+                System.out.println(aux);
+            }
+        }catch(Exception e){
+            
+        }
+        
+        
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        
+        //CÓDIGO PARA IMPRIMIR LAS CASILLAS DOBLES
+        try{
+            System.out.println("Dobles:");
+        for (int index = 0; index < listaPosiciones.getTamaño(); index++) {
+                Posicion aux = (Posicion) listaPosiciones.getValor(index);
+                if(aux.getTipo().equals("doble")){
+                
+                    System.out.println("(" +aux.getX() +", " +aux.getY() +")");
+                }
+
+            }
+        }catch(Exception e){
+            
+        }
+        
+        
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        
+        //CÓDIGO PARA IMPRIMIR LAS CASILLAS TRIPLES
+        try{
+            System.out.println("Triples:");
+        for (int index = 0; index < listaPosiciones.getTamaño(); index++) {
+                Posicion aux = (Posicion) listaPosiciones.getValor(index);
+                if(aux.getTipo().equals("triple")){
+                    System.out.println("(" +aux.getX() +", " +aux.getY() +")");
+                }
+
+            }
+        }catch(Exception e){
+            
+        }
+        
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -162,6 +249,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JTextField jTextField1;
