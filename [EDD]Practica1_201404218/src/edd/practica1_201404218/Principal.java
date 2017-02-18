@@ -109,6 +109,9 @@ public class Principal extends javax.swing.JFrame {
         //CÓDIGO PARA CARGAR EL ARCHIVO XML DEL DICCIONARIO
         //*************************************************
         
+        LeerXML lector = new LeerXML();
+        lector.leerXML();
+        
         //*************************************************
         
         
