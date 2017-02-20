@@ -5,8 +5,20 @@
  */
 package edd.practica1_201404218;
 
+import ListaSimple.NodoSimple;
+import static edd.practica1_201404218.EDDPractica1_201404218.listaJugadores;
 import static edd.practica1_201404218.EDDPractica1_201404218.listaPalabras;
 import static edd.practica1_201404218.EDDPractica1_201404218.listaPosiciones;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
@@ -44,6 +56,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -53,8 +66,11 @@ public class Principal extends javax.swing.JFrame {
         jButton1.setToolTipText("");
 
         jButton2.setText("Agregar jugador");
-
-        jTextField1.setText("jTextField1");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Archivo");
 
@@ -97,6 +113,14 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem7);
 
+        jMenuItem4.setText("Ver jugadores");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -136,74 +160,244 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        
+
         //CÓDIGO PARA CARGAR EL ARCHIVO XML DEL DICCIONARIO
         //*************************************************
-        
         LeerXML lector = new LeerXML();
         lector.leerXML();
-        
+
         //*************************************************
-        
-        
-        
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
-        
-                //CÓDIGO PARA IMPRIMIR LAS PALABRAS
-        try{
-            for (int index = 0; index < listaPalabras.getTamaño(); index++) {
-                String aux = (String) listaPalabras.getValor(index);
-                System.out.println(aux);
-            }
-        }catch(Exception e){
-            
+
+//                CÓDIGO PARA IMPRIMIR LAS PALABRAS
+//        try{
+//            for (int index = 0; index < listaPalabras.getTamaño(); index++) {
+//                String aux = (String) listaPalabras.getValor(index);
+//                System.out.println(aux);
+//            }
+//        }catch(Exception e){
+//            
+//        }
+        //SE CONSTRUYE EL ENCABEZADO DEL CODIGO PARA GRAPHVIZ
+        String comandos = "";
+        comandos += "digraph G ";
+        comandos += "{ ";
+        comandos += "node [shape=circle]; ";
+        comandos += "node [style=filled]; ";
+        comandos += "node [fillcolor=\"#EEEEEE\"]; ";
+        comandos += "node [color=\"#EEEEEE\"]; ";
+        comandos += "edge [color=\"#31CEF0\"]; ";
+
+        //SE ESCRIBEN LOS NODOS EN BASE A LA LISTA DE PALABRAS
+        NodoSimple temp = listaPalabras.getInicio();
+        while (temp.getSiguiente() != null) {
+
+            comandos += temp.getValor() + " -> " + temp.getSiguiente().getValor() + " ";
+            temp = temp.getSiguiente();
         }
-        
-        
+
+        //SE TERMINA EL COMANDO DE GRAPHVIZ
+        comandos += "rankdir=LR; \n";
+        comandos += "}";
+
+        try {
+
+            //SE CREA EL ARCHIVO TXT CON LOS COMANDOS
+            BufferedWriter bw = null;
+            FileWriter fw = null;
+            fw = new FileWriter("palabras.txt");
+            bw = new BufferedWriter(fw);
+            bw.write(comandos);
+            bw.close();
+            fw.close();
+
+        } catch (Exception e) {
+
+        }
+
+        //SE EJECUTAN LOS COMANDOS DEL TXT Y SE CREA EL PNG
+        String[] cmd = new String[5];
+        cmd[0] = "dot";
+        cmd[1] = "-Tpng";
+        cmd[2] = "palabras.txt";
+        cmd[3] = "-o";
+        cmd[4] = "palabras.png";
+        Runtime rt = Runtime.getRuntime();
+        try {
+
+            rt.exec(cmd);
+
+        } catch (Exception e) {
+
+        }
+
+        //SE AGREGA EL PNG A UN LABEL, ESTE A UN FRAME Y SE MUESTRAN
+        Palabras palabras = new Palabras();
+        palabras.setVisible(true);
+        palabras.setLayout(new FlowLayout());
+        palabras.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+        ImageIcon ii = new ImageIcon("palabras.png");
+
+        JLabel label = new JLabel(ii);
+        palabras.add(label, BorderLayout.CENTER);
+        palabras.pack();
+
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
-        
+
         //CÓDIGO PARA IMPRIMIR LAS CASILLAS DOBLES
-        try{
+        try {
             System.out.println("Dobles:");
-        for (int index = 0; index < listaPosiciones.getTamaño(); index++) {
+            for (int index = 0; index < listaPosiciones.getTamaño(); index++) {
                 Posicion aux = (Posicion) listaPosiciones.getValor(index);
-                if(aux.getTipo().equals("doble")){
-                
-                    System.out.println("(" +aux.getX() +", " +aux.getY() +")");
+                if (aux.getTipo().equals("doble")) {
+
+                    System.out.println("(" + aux.getX() + ", " + aux.getY() + ")");
                 }
 
             }
-        }catch(Exception e){
-            
+        } catch (Exception e) {
+
         }
-        
-        
+
+
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
-        
+
         //CÓDIGO PARA IMPRIMIR LAS CASILLAS TRIPLES
-        try{
+        try {
             System.out.println("Triples:");
-        for (int index = 0; index < listaPosiciones.getTamaño(); index++) {
+            for (int index = 0; index < listaPosiciones.getTamaño(); index++) {
                 Posicion aux = (Posicion) listaPosiciones.getValor(index);
-                if(aux.getTipo().equals("triple")){
-                    System.out.println("(" +aux.getX() +", " +aux.getY() +")");
+                if (aux.getTipo().equals("triple")) {
+                    System.out.println("(" + aux.getX() + ", " + aux.getY() + ")");
                 }
 
             }
-        }catch(Exception e){
+        } catch (Exception e) {
+
+        }
+
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+
+        String nombre = jTextField1.getText();
+        Jugador aux = new Jugador();
+        aux.setNombre(nombre);
+        listaJugadores.add(aux);
+
+        jTextField1.setText("");
+
+        try {
+            for (int index = 0; index < listaJugadores.getTamaño(); index++) {
+                Jugador temp = (Jugador) listaJugadores.getValor(index);
+                System.out.println(temp.getNombre() + " le sigue ");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al imprimir la lista");
+        }
+
+        if (!listaJugadores.isEmpty()) {
+
+            //SE CONSTRUYE EL ENCABEZADO DEL CODIGO PARA GRAPHVIZ
+            String comandos = "";
+            comandos += "digraph G ";
+            comandos += "{ ";
+            comandos += "node [shape=circle]; ";
+            comandos += "node [style=filled]; ";
+            comandos += "node [fillcolor=\"#EEEEEE\"]; ";
+            comandos += "node [color=\"#EEEEEE\"]; ";
+            comandos += "edge [color=\"#31CEF0\"]; ";
+
+            //SE ESCRIBEN LOS NODOS EN BASE A LA LISTA DE PALABRAS
+            ListaCircular.NodoSimple temp = listaJugadores.getInicio();
+
+            while (temp.getSiguiente() != listaJugadores.getInicio()) {
+                Jugador aux2 = (Jugador) temp.getValor();
+                Jugador aux3 = (Jugador) temp.getSiguiente().getValor();
+                comandos += aux2.getNombre() + " -> " + aux3.getNombre() + " ";
+                temp = temp.getSiguiente();
+            }
+
+            Jugador aux2 = (Jugador) temp.getValor();
+            Jugador aux3 = (Jugador) temp.getSiguiente().getValor();
+            comandos += aux2.getNombre() + " -> " + aux3.getNombre() + " ";
+
+            //SE TERMINA EL COMANDO DE GRAPHVIZ
+            comandos += "rankdir=LR; \n";
+            comandos += "}";
+
+            try {
+
+                //SE CREA EL ARCHIVO TXT CON LOS COMANDOS
+                BufferedWriter bw = null;
+                FileWriter fw = null;
+                fw = new FileWriter("jugadores.txt");
+                bw = new BufferedWriter(fw);
+                bw.write(comandos);
+                bw.close();
+                fw.close();
+
+            } catch (Exception e) {
+                System.out.println("Error al crear el archivo txt");
+            }
+
+            //SE EJECUTAN LOS COMANDOS DEL TXT Y SE CREA EL PNG
+            String[] cmd = new String[5];
+            cmd[0] = "dot";
+            cmd[1] = "-Tpng";
+            cmd[2] = "jugadores.txt";
+            cmd[3] = "-o";
+            cmd[4] = "jugadores.png";
+            Runtime rt = Runtime.getRuntime();
+            try {
+
+                rt.exec(cmd);
+
+            } catch (Exception e) {
+                System.out.println("Error al ejecutar el txt y crear el png");
+            }
+        
+        }else{
             
         }
         
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+
+            //SE AGREGA EL PNG A UN LABEL, ESTE A UN FRAME Y SE MUESTRAN
+            Palabras palabras = new Palabras();
+            palabras.setLayout(new FlowLayout());
+            palabras.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            ImageIcon ii = new ImageIcon("jugadores.png");
+            JLabel label = new JLabel(ii);
+
+            palabras.add(label, BorderLayout.CENTER);
+            palabras.pack();
+
+            palabras.setVisible(true);
+            
+            Container panel = getContentPane();
+            panel.setLayout(new FlowLayout()); 
+            
+            panel.add(label);
+            panel.repaint();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,6 +443,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
