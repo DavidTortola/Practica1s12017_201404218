@@ -5,6 +5,7 @@
  */
 package edd.practica1_201404218;
 
+import ListaCircular.ListaCircular;
 import ListaSimple.ListaSimple;
 
 /**
@@ -19,6 +20,7 @@ public class EDDPractica1_201404218 {
     
     public static ListaSimple listaPosiciones = new ListaSimple();
     public static ListaSimple listaPalabras = new ListaSimple();
+    public static ListaCircular listaJugadores = new ListaCircular();
     
     public static void main(String[] args) {
         // TODO code application logic here
